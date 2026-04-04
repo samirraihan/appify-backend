@@ -6,6 +6,7 @@ services:
         container_name: appify_backend_app
         volumes:
             - .:/var/www
+            - /tmp:/tmp
         networks:
             - app-network
 
