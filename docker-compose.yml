@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+    app:
+        build: .
+        container_name: appify_backend_app
+        volumes:
+            - .:/var/www
+        networks:
+            - app-network
+
+    nginx:
+        image: nginx:alpine
+        container_name: appify_backend_nginx
+        ports:
+            - "8000:80"
+        volumes:
+            - .:/var/www
+            - ./.docker/nginx:/etc/nginx/conf.d
+        depends_on:
+            - app
+        networks:
+            - app-network
+
+    mysql:
+        image: mysql:8
+        container_name: appify_backend_mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: appify
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "3307:3306"
+        networks:
+            - app-network
+
+networks:
+    app-network:
